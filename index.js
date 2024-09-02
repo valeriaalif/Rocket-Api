@@ -5,6 +5,8 @@ const express = require('express');
 const cors = require('cors');
 const config = require('./config.js');
 const TechAcademyRoutes = require('./Routes/TechAcademyRoutes.js');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const app = express();
 

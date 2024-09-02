@@ -1,5 +1,6 @@
 const express = require('express');
 const {
+  registerUserTechAcademy,
   createUserTechAcademy,
   getAllUsersTechAcademy,
   getUserTechAcademy,
@@ -10,6 +11,7 @@ const {
 const router = express.Router();
 
 router.get('/getAllUsersTechAcademy', getAllUsersTechAcademy);
+router.post('/registerUserTechAcademy', registerUserTechAcademy);
 router.post('/newUserTechAcademy', createUserTechAcademy);
 router.get('/getUserTechAcademy/:id', getUserTechAcademy);
 router.put('/updateUserTechAcademy/:id', updateUserTechAcademy);

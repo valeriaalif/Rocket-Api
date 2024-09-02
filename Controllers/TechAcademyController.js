@@ -1,9 +1,86 @@
 const { db } = require('../firebaseAdmin'); 
 const TechAcademy = require('../Models/TechAcademyModel');
 const admin = require('firebase-admin');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 const techAcademyCollection = db.collection('techAcademy');
+
+exports.registerUserTechAcademy = async (req, res, next) => {
+  try {
+
+    console.log(req.body);  
+    
+    if (!req.body.password) {  
+      return res.status(400).json({ error: 'Password is required' });
+    }
+
+    // Hash the user's password
+    const hashedPassword = await bcrypt.hash(req.body.password, 2); // 
+
+   
+    const user = new TechAcademy(
+      null, 
+      req.body.name,
+      req.body.phone,
+      hashedPassword,
+      req.body.nationalId,
+      req.body.email,
+      req.body.age,
+      req.body.englishLevel,
+      req.body.birthDate,
+      req.body.nationality,
+      req.body.province,
+      req.body.district,
+      req.body.area,
+      req.body.academicDegree,
+      req.body.children,
+      req.body.organization,
+      'TechAcademy'
+      
+    );
+
+    const userPlainObject = {
+      name: user.name,
+      phone: user.phone,
+      password: user.password,
+      nationalId: user.nationalId,
+      email: user.email,
+      age: user.age,
+      englishLevel: user.englishLevel,
+      birthDate: user.birthDate,
+      nationality: user.nationality,
+      province: user.province,
+      district: user.district,
+      area: user.area,
+      academicDegree: user.academicDegree,
+      children: user.children,
+      organization: user.organization,
+      access: user.access
+    
+    };
+
+   
+    const savedUserRef = await techAcademyCollection.add(userPlainObject);
+
+
+    const token = jwt.sign(
+      {
+        Id: savedUserRef.id,
+        userName: user.name,
+        userEmail: user.email,
+        userRole: user.access
+      },
+      process.env.JWT_SECRET_KEY,
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ token, message: 'User registered successfully' });
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
 
 exports.createUserTechAcademy = async (req, res, next) => {
   try {

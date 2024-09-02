@@ -1,8 +1,9 @@
 class TechAcademy {
-    constructor(id, name, phone, nationalId, email, age, englishLevel,birthDate,nationality, province, district,area,academicDegree, children, organization, access) {
+    constructor(id, name, phone,password, nationalId, email, age, englishLevel,birthDate,nationality, province, district,area,academicDegree, children, organization, access) {
       (this.id = id),
         (this.name = name),
         (this.phone = phone),
+        (this.password = password),
         (this.nationalId = nationalId),
         (this.email = email),
         (this.age = age),
