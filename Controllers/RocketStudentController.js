@@ -1,13 +1,13 @@
 const { db } = require('../firebaseAdmin'); 
-const TechAcademy = require('../Models/TechAcademyModel');
+const TechAcademy = require('../Models/RocketStudentModel');
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-const techAcademyCollection = db.collection('techAcademy');
+const rocketStudentsCollection = db.collection('rocketStudents');
 
-exports.registerUserTechAcademy = async (req, res, next) => {
+exports.registerRocketStudent = async (req, res, next) => {
   try {
 
     console.log(req.body);  
@@ -20,49 +20,43 @@ exports.registerUserTechAcademy = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 2); // 
 
    
-    const user = new TechAcademy(
+    const user = new RocketStudent(
       null, 
       req.body.name,
-      req.body.phone,
-      hashedPassword,
-      req.body.nationalId,
       req.body.email,
-      req.body.age,
-      req.body.englishLevel,
-      req.body.birthDate,
+      hashedPassword,
       req.body.nationality,
+      req.body.age,
+      req.body.academicDegree,
+      req.body.phone,
+      req.body.area,
       req.body.province,
       req.body.district,
-      req.body.area,
-      req.body.academicDegree,
-      req.body.children,
+      req.body.student,
       req.body.organization,
-      'TechAcademy'
+      'RocketStudent'
       
     );
 
     const userPlainObject = {
       name: user.name,
-      phone: user.phone,
-      password: user.password,
-      nationalId: user.nationalId,
       email: user.email,
-      age: user.age,
-      englishLevel: user.englishLevel,
-      birthDate: user.birthDate,
+      password: user.password,
       nationality: user.nationality,
+      age: user.age,
+      academicDegree: user.academicDegree,
+      phone: user.phone,
+      area: user.area,
       province: user.province,
       district: user.district,
-      area: user.area,
-      academicDegree: user.academicDegree,
-      children: user.children,
+      student: user.student,
       organization: user.organization,
       access: user.access
     
     };
 
    
-    const savedUserRef = await techAcademyCollection.add(userPlainObject);
+    const savedUserRef = await rocketStudentsCollection.add(userPlainObject);
 
 
     const token = jwt.sign(
@@ -82,11 +76,11 @@ exports.registerUserTechAcademy = async (req, res, next) => {
   }
 };
 
-exports.loginUserTechAcademy = async (req, res) => {
+exports.loginRocketStudent = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const userQuerySnapshot = await techAcademyCollection.where('email', '==', email).limit(1).get();
+    const userQuerySnapshot = await rocketStudentsCollection.where('email', '==', email).limit(1).get();
 
   
     if (userQuerySnapshot.empty) {
@@ -135,10 +129,10 @@ exports.loginUserTechAcademy = async (req, res) => {
 
 
 
-exports.createUserTechAcademy = async (req, res, next) => {
+exports.createRocketStudent = async (req, res, next) => {
   try {
     const data = req.body;
-    await techAcademyCollection.add(data);
+    await rocketStudentsCollection.add(data);
     res.status(200).send('UserTechAcademy created successfully');
   } catch (error) {
     res.status(400).send(error.message);
@@ -147,48 +141,46 @@ exports.createUserTechAcademy = async (req, res, next) => {
 
 
 
-exports.getAllUsersTechAcademy = async (req, res, next) => {
+exports.getAllStudents = async (req, res, next) => {
   try {
-    const techAcademy = await techAcademyCollection.get();
-    const techAcademyArray = [];
+    const rocketStudent = await rocketStudentsCollection.get();
+    const rocketStudentArray = [];
 
-    if (techAcademy.empty) {
+    if (rocketStudent.empty) {
       res.status(400).send('No Users found');
     } else {
-      techAcademy.forEach((doc) => {
+        rocketStudent.forEach((doc) => {
         const techAcademy = new TechAcademy(
           doc.id,
           doc.data().name,
-          doc.data().phone,
-          doc.data().nationalId,
           doc.data().email,
-          doc.data().age,
-          doc.data().englishLevel,
-          doc.data().birthDate,
+          doc.data().password,
           doc.data().nationality,
+          doc.data().age,
+          doc.data().academicDegree,
+          doc.data().phone,
+          doc.data().area,
           doc.data().province,
           doc.data().district,
-          doc.data().area,
-          doc.data().academicDegree,
-          doc.data().children,
+          doc.data().student,
           doc.data().organization,
           doc.data().access
         );
-        techAcademyArray.push(techAcademy);
+        rocketStudentArray.push(rocketStudent);
       });
 
-      res.status(200).send(techAcademyArray);
+      res.status(200).send(rocketStudentArray);
     }
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-exports.getUserTechAcademy = async (req, res, next) => {
+exports.getRocketStudent = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const techAcademyDoc = techAcademyCollection.doc(id);
-    const data = await techAcademyDoc.get();
+    const RocketStudentDoc = rocketStudentsCollection.doc(id);
+    const data = await RocketStudentDoc.get();
     if (data.exists) {
       res.status(200).send(data.data());
     } else {
@@ -199,22 +191,22 @@ exports.getUserTechAcademy = async (req, res, next) => {
   }
 };
 
-exports.updateUserTechAcademy = async (req, res, next) => {
+exports.updateRocketStudent = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    const techAcademyDoc = techAcademyCollection.doc(id);
-    await techAcademyDoc.update(data);
+    const RocketStudentDoc = rocketStudentsCollection.doc(id);
+    await RocketStudentDoc.update(data);
     res.status(200).send('User updated successfully');
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-exports.deleteUserTechAcademy = async (req, res, next) => {
+exports.deleteRocketStudent = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await techAcademyCollection.doc(id).delete();
+    await rocketStudentsCollection.doc(id).delete();
     res.status(200).send('User deleted successfully');
   } catch (error) {
     res.status(400).send(error.message);
