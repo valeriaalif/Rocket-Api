@@ -82,6 +82,62 @@ exports.registerUserTechAcademy = async (req, res, next) => {
   }
 };
 
+exports.loginUserTechAcademy = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Query to find the user by email in the 'techAcademy' collection
+    const userQuerySnapshot = await techAcademyCollection.where('email', '==', email).limit(1).get();
+
+    // Check if the user exists
+    if (userQuerySnapshot.empty) {
+      return res.status(401).json({ error: 'Authentication failed: User not found' });
+    }
+
+    // Get the first matching document from the query result
+    const userDoc = userQuerySnapshot.docs[0];
+    const userData = userDoc.data(); // Fetch user data
+
+    // Check if the provided password matches the stored hashed password
+    const passwordMatch = await bcrypt.compare(password, userData.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Authentication failed: Incorrect password' });
+    }
+
+    // If authorization header exists, verify it and generate a new token
+    if (req.headers['authorization']) {
+      authenticateToken(req, res, async () => {
+        const token = jwt.sign(
+          { Id: userDoc.id },
+          process.env.JWT_SECRET_KEY,
+          { expiresIn: '1h' }
+        );
+        res.status(200).json({ token });
+      });
+    } else {
+      // No authorization header; issue a new token
+      const token = jwt.sign(
+        {
+          Id: userDoc.id,
+          userRole: userData.access,
+          userName: userData.name,
+          userEmail: userData.email,
+        },
+        process.env.JWT_SECRET_KEY,
+        { expiresIn: '1h' }
+      );
+      res.status(200).json({ token });
+    }
+
+  } catch (error) {
+    console.error('Login error:', error.message);
+    res.status(500).json({ error: 'Login failed' });
+  }
+};
+
+
+
 exports.createUserTechAcademy = async (req, res, next) => {
   try {
     const data = req.body;
@@ -91,6 +147,8 @@ exports.createUserTechAcademy = async (req, res, next) => {
     res.status(400).send(error.message);
   }
 };
+
+
 
 exports.getAllUsersTechAcademy = async (req, res, next) => {
   try {
