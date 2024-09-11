@@ -1,13 +1,13 @@
 const { db } = require('../firebaseAdmin'); 
-const TechAcademy = require('../Models/RocketStudentModel');
+const TechAcademy = require('../Models/RocketBabiesModel');
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 
-const rocketStudentsCollection = db.collection('rocketStudents');
+const rocketBabiesCollection = db.collection('rocketBabies');
 
-exports.registerRocketStudent = async (req, res, next) => {
+exports.registerRocketBabies = async (req, res, next) => {
   try {
 
     console.log(req.body);  
@@ -20,49 +20,47 @@ exports.registerRocketStudent = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(req.body.password, 2); // 
 
    
-    const user = new RocketStudent(
+    const user = new RocketBabies(
       null, 
-      req.body.name,
-      req.body.email,
+      req.body.parent,
+      req.body.nationalId,
       hashedPassword,
-      req.body.nationality,
+      req.body.email,
       req.body.age,
-      req.body.academicDegree,
-      req.body.phone,
+      req.body.birthDate,
+      req.body.nationality,
       req.body.area,
       req.body.province,
       req.body.district,
-      req.body.student,
-      req.body.organization,
-      'RocketStudent'
+      req.body.kidName,
+      'RocketBabies'
       
     );
 
     const userPlainObject = {
-      name: user.name,
-      email: user.email,
+      name: user.parent,
+      nationalId: user.nationalId,
       password: user.password,
-      nationality: user.nationality,
+      email: user.email,
       age: user.age,
-      academicDegree: user.academicDegree,
-      phone: user.phone,
+      birthDate: user.birthDate,
+      nationality: user.nationality,
       area: user.area,
       province: user.province,
       district: user.district,
-      student: user.student,
-      organization: user.organization,
+      kidName: user.kidName,
       access: user.access
     
     };
 
    
-    const savedUserRef = await rocketStudentsCollection.add(userPlainObject);
+    const savedUserRef = await rocketBabiesCollection.add(userPlainObject);
 
 
     const token = jwt.sign(
       {
         Id: savedUserRef.id,
-        userName: user.name,
+        userName: user.parent,
         userEmail: user.email,
         userRole: user.access
       },
@@ -76,11 +74,11 @@ exports.registerRocketStudent = async (req, res, next) => {
   }
 };
 
-exports.loginRocketStudent = async (req, res) => {
+exports.loginRocketBabies = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const userQuerySnapshot = await rocketStudentsCollection.where('email', '==', email).limit(1).get();
+    const userQuerySnapshot = await rocketBabiesCollection.where('email', '==', email).limit(1).get();
 
   
     if (userQuerySnapshot.empty) {
@@ -112,7 +110,7 @@ exports.loginRocketStudent = async (req, res) => {
         {
           Id: userDoc.id,
           userRole: userData.access,
-          userName: userData.name,
+          userName: userData.parent,
           userEmail: userData.email,
         },
         process.env.JWT_SECRET_KEY,
@@ -129,11 +127,11 @@ exports.loginRocketStudent = async (req, res) => {
 
 
 
-exports.createRocketStudent = async (req, res, next) => {
+exports.createRocketBabies = async (req, res, next) => {
   try {
     const data = req.body;
-    await rocketStudentsCollection.add(data);
-    res.status(200).send('UserTechAcademy created successfully');
+    await rocketBabiesCollection.add(data);
+    res.status(200).send('User created successfully');
   } catch (error) {
     res.status(400).send(error.message);
   }
@@ -141,32 +139,31 @@ exports.createRocketStudent = async (req, res, next) => {
 
 
 
-exports.getAllStudents = async (req, res, next) => {
+exports.getAllRocketBabies = async (req, res, next) => {
   try {
-    const rocketStudent = await rocketStudentsCollection.get();
-    const rocketStudentArray = [];
+    const rocketBabies = await rocketBabiesCollection.get();
+    const rocketBabiesArray = [];
 
-    if (rocketStudent.empty) {
+    if (rocketBabies.empty) {
       res.status(400).send('No Users found');
     } else {
-        rocketStudent.forEach((doc) => {
-        const RocketStudent = new RocketStudent(
+        rocketBabies.forEach((doc) => {
+        const RocketBabies = new RocketBabies(
           doc.id,
-          doc.data().name,
-          doc.data().email,
+          doc.data().parent,
+          doc.data().nationalId,
           doc.data().password,
-          doc.data().nationality,
+          doc.data().email,
           doc.data().age,
-          doc.data().academicDegree,
-          doc.data().phone,
+          doc.data().birthDate,
+          doc.data().nationality,
           doc.data().area,
           doc.data().province,
           doc.data().district,
-          doc.data().student,
-          doc.data().organization,
+          doc.data().kidName,
           doc.data().access
         );
-        rocketStudentArray.push(rocketStudent);
+        rocketBabiesArray.push(rocketBabies);
       });
 
       res.status(200).send(rocketStudentArray);
@@ -176,11 +173,11 @@ exports.getAllStudents = async (req, res, next) => {
   }
 };
 
-exports.getRocketStudent = async (req, res, next) => {
+exports.getRocketBabies = async (req, res, next) => {
   try {
     const id = req.params.id;
-    const RocketStudentDoc = rocketStudentsCollection.doc(id);
-    const data = await RocketStudentDoc.get();
+    const RocketBabiesDoc = rocketBabiesCollection.doc(id);
+    const data = await RocketBabiesDoc.get();
     if (data.exists) {
       res.status(200).send(data.data());
     } else {
@@ -191,22 +188,22 @@ exports.getRocketStudent = async (req, res, next) => {
   }
 };
 
-exports.updateRocketStudent = async (req, res, next) => {
+exports.updateRocketBabies = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
-    const RocketStudentDoc = rocketStudentsCollection.doc(id);
-    await RocketStudentDoc.update(data);
+    const RocketBabiesDoc = rocketBabiesCollection.doc(id);
+    await RocketBabiesDoc.update(data);
     res.status(200).send('User updated successfully');
   } catch (error) {
     res.status(400).send(error.message);
   }
 };
 
-exports.deleteRocketStudent = async (req, res, next) => {
+exports.deleteRocketBabies = async (req, res, next) => {
   try {
     const id = req.params.id;
-    await rocketStudentsCollection.doc(id).delete();
+    await rocketBabiesCollection.doc(id).delete();
     res.status(200).send('User deleted successfully');
   } catch (error) {
     res.status(400).send(error.message);
