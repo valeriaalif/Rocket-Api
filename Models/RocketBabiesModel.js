@@ -16,3 +16,5 @@ constructor(id,parent,nationalId,password,email,age,birthDate,nationality,area,p
 
 }
 }
+
+module.exports = RocketBabies;

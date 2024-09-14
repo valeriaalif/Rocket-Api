@@ -17,3 +17,5 @@ class RocketStudent{
     }
 
 }
+
+module.exports = RocketStudent;

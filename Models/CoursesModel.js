@@ -21,3 +21,5 @@ constructor(id, title, teacher,startDate,finishDate,schedule,duration,platform,t
 (this.difficulty=difficulty)
 }
 }
+
+module.exports = Courses;

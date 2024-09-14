@@ -1,5 +1,5 @@
 const { db } = require('../firebaseAdmin'); 
-const TechAcademy = require('../Models/RocketStudentModel');
+const RocketStudent = require('../Models/RocketStudentModel');
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
