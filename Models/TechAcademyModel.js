@@ -1,24 +1,17 @@
 class TechAcademy {
-    constructor(id, name, phone,password, nationalId, email, age, englishLevel,birthDate,nationality, province, district,area,academicDegree, children, organization, access) {
-      (this.id = id),
-        (this.name = name),
-        (this.phone = phone),
-        (this.password = password),
-        (this.nationalId = nationalId),
-        (this.email = email),
-        (this.age = age),
-        (this.englishLevel = englishLevel),
-        (this.birthDate = birthDate),
-        (this.nationality = nationality),
-        (this.province = province),
-        (this.district = district),
-        (this.area = area),
-        (this.academicDegree = academicDegree),
-        (this.children = children),
-        (this.access = access),
-        (this.organization = organization);
-        
-    }
+  constructor(id, userId, courseId, academicDegree, children, birthDate, province, district, area,organization, englishLevel) {
+    (this.id = id),
+      (this.userId = userId),
+      (this.courseId = courseId),
+      (this.academicDegree = academicDegree),
+      (this.children = children),
+      (this.birthDate = birthDate),
+      (this.province = province),
+      (this.district = district),
+      (this.area = area),
+      (this.organization = organization),
+      (this.englishLevel = englishLevel)
   }
-  
-  module.exports = TechAcademy;
+}
+
+module.exports = TechAcademy;
