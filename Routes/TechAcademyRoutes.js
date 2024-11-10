@@ -1,6 +1,5 @@
 const express = require('express');
 const {
-  loginUserTechAcademy,
   registerUserTechAcademy,
   createUserTechAcademy,
   getAllUsersTechAcademy,
@@ -11,7 +10,6 @@ const {
 
 const router = express.Router();
 
-router.post('/loginUserTechAcademy', loginUserTechAcademy);
 router.get('/getAllUsersTechAcademy', getAllUsersTechAcademy);
 router.post('/registerUserTechAcademy', registerUserTechAcademy);
 router.post('/newUserTechAcademy', createUserTechAcademy);
