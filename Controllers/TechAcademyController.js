@@ -15,8 +15,8 @@ exports.registerUserTechAcademy = async (req, res, next) => {
     // Create a new TechAcademy instance with the provided data
     const inscriptionTechAcademy = new TechAcademy(
       null,  // Firestore will generate the ID, so leave this as null initially
-      req.body.userId,
-      req.body.courseId,
+      req.body.userName,
+      req.body.courseTitle,
       req.body.academicDegree,
       req.body.children,
       req.body.birthDate,  // This will now be a string in YYYY-MM-DD format
@@ -29,8 +29,8 @@ exports.registerUserTechAcademy = async (req, res, next) => {
 
     // Convert the instance to a plain object for Firestore
     const inscriptionTechAcademyPlainObject = {
-      userId: inscriptionTechAcademy.userId,
-      courseId: inscriptionTechAcademy.courseId,
+      userName: inscriptionTechAcademy.userName,
+      courseTitle: inscriptionTechAcademy.courseTitle,
       academicDegree: inscriptionTechAcademy.academicDegree,
       children: inscriptionTechAcademy.children,
       birthDate: inscriptionTechAcademy.birthDate,
