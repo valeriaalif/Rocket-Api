@@ -1,21 +1,16 @@
 class RocketStudent{
-    constructor(id,name,email,password,nationality,age,academicDegree,phone,area,province,district,student,organization,access){
+    constructor(id,userName,age,academicDegree,area,province,district,student,organization){
     (this.id= id),
-    (this.name=name),
-    (this.email=email),
-    (this.password=password),
-    (this.nationality=nationality),
+    (this.userName=userName),
+    (this.courseTitle=courseTitle),
     (this.age=age),
     (this.academicDegree=academicDegree),
-    (this.phone=phone),
     (this.area=area),
     (this.province=province),
     (this.district=district),
     (this.student=student),
-    (this.organization=organization),
-    (this.access=access)
+    (this.organization=organization)
     }
-
 }
 
 module.exports = RocketStudent;

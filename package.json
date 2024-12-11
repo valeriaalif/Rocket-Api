@@ -1,7 +1,7 @@
 {
   "name": "rocketapi",
   "version": "1.0.0",
-  "description": "",
+  "description": "This API was developed for Rocket Girls foundation. Rocket Girls is a non-profit organization that grants scholarships to people with \r fewer oportunities in life. The scholarships are in techonology-related fields, they include several courses and workshops.\r To make this possible this API is part of a system designed to fulfill the inscription process for the scholarships.",
   "main": "index.js",
   "type": "commonjs",
   "scripts": {
@@ -29,5 +29,6 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/express": "^4.17.21"
-  }
+  },
+  "keywords": []
 }
