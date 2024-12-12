@@ -1,5 +1,5 @@
 class RocketStudent{
-    constructor(id,userName,age,academicDegree,area,province,district,student,organization){
+    constructor(id,userName,courseTitle,age,academicDegree,area,province,district,student,organization){
     (this.id= id),
     (this.userName=userName),
     (this.courseTitle=courseTitle),
