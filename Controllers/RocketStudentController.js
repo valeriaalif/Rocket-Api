@@ -40,7 +40,7 @@ exports.registerRocketStudent = async (req, res, next) => {
       organization: inscriptionRocketStudent.organization,
     };
 
-    // Add the document to Firestore (Firestore will generate an ID)
+   
     await rocketStudentsCollection.add(inscriptionRocketStudentPlainObject);
 
     

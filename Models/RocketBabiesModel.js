@@ -1,7 +1,8 @@
 class RocketBabies{
-constructor(id,parent,age,birthDate,area,province,district,kidName){
+constructor(id,userName,courseTitle,parent,age,birthDate,area,province,district,kidName){
 (this.id=id),
-(this.courseTitle=courseTItle),
+(this.userName=userName),
+(this.courseTitle=courseTitle),
 (this.parent=parent),
 (this.age=age),
 (this.birthDate=birthDate),
