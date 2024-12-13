@@ -17,12 +17,8 @@ exports.registerRocketBabies = async (req, res, next) => {
       req.body.userName,
       req.body.courseTitle,
       req.body.parent,
-      req.body.nationalId,
-      hashedPassword,
-      req.body.email,
       req.body.age,
       req.body.birthDate,
-      req.body.nationality,
       req.body.area,
       req.body.province,
       req.body.district,
@@ -32,13 +28,9 @@ exports.registerRocketBabies = async (req, res, next) => {
     const userPlainObject = {
       userName: user.userName,
       courseTitle: user.courseTitle,
-      name: user.parent,
-      nationalId: user.nationalId,
-      password: user.password,
-      email: user.email,
+      parent: user.parent,
       age: user.age,
       birthDate: user.birthDate,
-      nationality: user.nationality,
       area: user.area,
       province: user.province,
       district: user.district,
@@ -48,7 +40,7 @@ exports.registerRocketBabies = async (req, res, next) => {
    
    await rocketBabiesCollection.add(userPlainObject);
 
-    res.status(200).json({ token, message: 'User registered successfully' });
+    res.status(200).json({ message: 'User registered successfully' });
   } catch (error) {
     res.status(400).send(error.message);
   }
