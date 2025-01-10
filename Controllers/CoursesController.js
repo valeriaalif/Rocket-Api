@@ -350,6 +350,8 @@ exports.updateCourse = async (req, res, next) => {
   try {
     const id = req.params.id;
     const data = req.body;
+    console.log("Updating course with ID:", id); // Log the ID
+    console.log("Received data:", data); // Log the data
     const coursesDoc = coursesCollection.doc(id);
     await coursesDoc.update(data);
     res.status(200).send('Course updated successfully');

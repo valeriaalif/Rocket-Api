@@ -3,6 +3,7 @@ const User = require('../Models/AuthModel');
 const admin = require('firebase-admin');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { auth } = require('firebase-admin');
 
 
 const usersCollection = db.collection('users');
@@ -224,6 +225,26 @@ exports.deleteUser = async (req, res, next) => {
     res.status(400).send(error.message);
   }
 };
+
+exports.forgotPwd = async (req, res) => {
+  const { enteredEmail } = req.body;
+
+  if (!enteredEmail) {
+    return res.status(400).json({ message: "Email is required." });
+  }
+
+  try {
+    await auth().generatePasswordResetLink(enteredEmail); // Use email as-is
+    return res.status(200).json({ message: "Password reset email sent successfully. Please check your inbox." });
+  } catch (error) {
+    console.error("Error sending password reset email:", error);
+    if (error.code === 'auth/user-not-found') {
+      return res.status(404).json({ message: "No user found with the provided email." });
+    }
+    return res.status(500).json({ message: "Failed to send password reset email. Please try again later." });
+  }
+};
+
 
 // Simple logout route - just to demonstrate API structure
 exports.logout = async (req, res) => {
