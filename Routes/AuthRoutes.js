@@ -9,6 +9,7 @@ updateUser,
 deleteUser,
 logout,
 getUserbyEmail,
+forgotPwd,
 } = require('../Controllers/AuthController.js');
 
 const router = express.Router();
@@ -22,5 +23,6 @@ router.get('/getAllUsers', getAllUsers);
 router.get('/getUser/:id', getUser);
 router.put('/updateUser/:id', updateUser);
 router.delete('/deleteUser/:id', deleteUser);
+router.post('/forgotPwd', forgotPwd);
 
 module.exports = router;
