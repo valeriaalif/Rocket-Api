@@ -9,17 +9,17 @@ const techAcademyCollection = db.collection('techAcademy');
 
 exports.registerUserTechAcademy = async (req, res, next) => {
   try {
-    console.log("Request body:", req.body); // Log the incoming request body
+    console.log("Request body:", req.body); 
 
 
-    // Create a new TechAcademy instance with the provided data
+
     const inscriptionTechAcademy = new TechAcademy(
-      null,  // Firestore will generate the ID, so leave this as null initially
+      null,  
       req.body.userName,
       req.body.courseTitle,
       req.body.academicDegree,
       req.body.children,
-      req.body.birthDate,  // This will now be a string in YYYY-MM-DD format
+      req.body.birthDate, 
       req.body.province,
       req.body.district,
       req.body.area,
@@ -27,7 +27,7 @@ exports.registerUserTechAcademy = async (req, res, next) => {
       req.body.englishLevel
     );
 
-    // Convert the instance to a plain object for Firestore
+ 
     const inscriptionTechAcademyPlainObject = {
       userName: inscriptionTechAcademy.userName,
       courseTitle: inscriptionTechAcademy.courseTitle,
@@ -41,7 +41,6 @@ exports.registerUserTechAcademy = async (req, res, next) => {
       englishLevel: inscriptionTechAcademy.englishLevel,
     };
 
-    // Add the document to Firestore (Firestore will generate an ID)
     await techAcademyCollection.add(inscriptionTechAcademyPlainObject);
 
     
@@ -49,7 +48,7 @@ exports.registerUserTechAcademy = async (req, res, next) => {
       message: 'Inscription registered successfully',
     });
   } catch (error) {
-    console.error("Error registering inscription:", error.message); // Log the actual error
+    console.error("Error registering inscription:", error.message); 
     res.status(400).send(error.message);
   }
 };

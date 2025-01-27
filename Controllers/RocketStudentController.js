@@ -10,12 +10,12 @@ const rocketStudentsCollection = db.collection('rocketStudents');
 
 exports.registerRocketStudent = async (req, res, next) => {
   try {
-    console.log("Request body:", req.body); // Log the incoming request body
+  
 
 
-    // Create a new TechAcademy instance with the provided data
+ 
     const inscriptionRocketStudent = new RocketStudent(
-      null,  // Firestore will generate the ID, so leave this as null initially
+      null, 
       req.body.userName,
       req.body.courseTitle,
       req.body.age, 
@@ -27,7 +27,7 @@ exports.registerRocketStudent = async (req, res, next) => {
       req.body.organization,
     );
 
-    // Convert the instance to a plain object for Firestore
+ 
     const inscriptionRocketStudentPlainObject = {
       userName: inscriptionRocketStudent.userName,
       courseTitle: inscriptionRocketStudent.courseTitle,
@@ -48,7 +48,7 @@ exports.registerRocketStudent = async (req, res, next) => {
       message: 'Inscription registered successfully',
     });
   } catch (error) {
-    console.error("Error registering inscription:", error.message); // Log the actual error
+    console.error("Error registering inscription:", error.message); 
     res.status(400).send(error.message);
   }
 };

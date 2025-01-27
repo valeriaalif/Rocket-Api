@@ -18,21 +18,20 @@ exports.registerUser = async (req, res, next) => {
       return res.status(400).json({ error: 'Password is required' });
     }
 
-    // Step 1: Create the user in Firebase Authentication using the Admin SDK
     const firebaseUser = await admin.auth().createUser({
       email,
       password,
       displayName: fullname,
     });
 
-    const userId = firebaseUser.uid; // Firebase user ID
+    const userId = firebaseUser.uid; 
 
-    // Step 2: Hash the password for your database (optional, if you need it for local use)
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Step 3: Create the user object for Firestore
+  
     const user = new User(
-      userId, // Use Firebase user ID as a unique identifier
+      userId, 
       fullname,
       nationalId,
       age,
@@ -54,13 +53,13 @@ exports.registerUser = async (req, res, next) => {
       access: user.access,
     };
 
-    // Step 4: Store the user in Firestore
+   
     const savedUserRef = await usersCollection.add(userPlainObject);
 
-    // Step 5: Generate a JWT token
+ 
     const token = jwt.sign(
       {
-        id: savedUserRef.id,
+        Id: savedUserRef.id,
         userName: user.fullname,
         userEmail: user.email,
         userRole: user.access,
@@ -69,7 +68,7 @@ exports.registerUser = async (req, res, next) => {
       { expiresIn: '1h' }
     );
 
-    // Step 6: Return the token and success message
+   
     res.status(200).json({ token, message: 'User registered successfully' });
   } catch (error) {
     console.error('Error registering user:', error);
@@ -79,7 +78,7 @@ exports.registerUser = async (req, res, next) => {
 
 exports.login = async (req, res) => {
   try {
-    console.log('Request body:', req.body); // Log the incoming request body
+    console.log('Request body:', req.body); 
     const { email, password } = req.body;
 
     const userQuerySnapshot = await usersCollection.where('email', '==', email).limit(1).get();
@@ -189,18 +188,15 @@ exports.getUser = async (req, res, next) => {
 
 exports.getUserbyEmail = async (req, res, next) => {
   try {
-    const { email, password } = req.body; // Get the email from the request body
-
-    // Query the usersCollection to find the user by email
+    const { email, password } = req.body; 
     const userQuerySnapshot = await usersCollection.where('email', '==', email).limit(1).get();
 
     if (userQuerySnapshot.empty) {
       return res.status(404).send('User not found'); // If no user found, return 404
     }
 
-    // If a user is found, get the user data
     const userDoc = userQuerySnapshot.docs[0];
-    res.status(200).send(userDoc.data()); // Send back the user data
+    res.status(200).send(userDoc.data()); 
     const passwordMatch = await bcrypt.compare(password, userData.password);
 
     if (!passwordMatch) {
@@ -209,7 +205,7 @@ exports.getUserbyEmail = async (req, res, next) => {
 
 
   } catch (error) {
-    res.status(400).send(error.message); // Handle errors
+    res.status(400).send(error.message); 
   }
 };
 
@@ -245,19 +241,19 @@ exports.forgotPwd = async (req, res) => {
   }
 
   try {
-    // Generate a password reset email using Firebase Admin
+    
     await sendPasswordResetEmail(auth,email)
     .then(() => console.log("Password Reset Email Sent")
     .catch((error)=> console.log(error.message)));
 
-    // Respond with success
+    
     res.status(200).json({
       message: "Password reset email sent successfully. Please check your email.",
     });
   } catch (error) {
     console.error("Error sending password reset email:", error);
 
-    // Handle errors and respond with appropriate messages
+    
     if (error.code === 'auth/user-not-found') {
       return res.status(404).json({
         message: "No user found with the provided email.",
@@ -271,13 +267,13 @@ exports.forgotPwd = async (req, res) => {
 };
 
 
-// Simple logout route - just to demonstrate API structure
+
 exports.logout = async (req, res) => {
   try {
-    // Simply respond to indicate logout success
+
     res.status(200).json({ message: 'Logged out successfully' });
 
-    // On the client side, you will remove the token from storage (e.g., AsyncStorage, localStorage, etc.).
+
   } catch (error) {
     console.error('Logout error:', error.message);
     res.status(500).json({ error: 'Logout failed' });
